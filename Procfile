@@ -1,1 +1,0 @@
-web: python manage.py migrate && gunicorn django_crud_api.wsgi
