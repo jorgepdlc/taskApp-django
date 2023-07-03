@@ -13,7 +13,7 @@ export function Toolbar() {
         </div>
         <div className="flex items-center">
           <div
-            className="flex items-center text-sky-400 h-auto hover:bg-zinc-700
+            className="flex items-center text-sky-400 h-auto hover:bg-neutral-800
                     rounded py-1 px-3 cursor-pointer"
           >
             <HiOutlineSwitchVertical className="mr-1 text-xl" />

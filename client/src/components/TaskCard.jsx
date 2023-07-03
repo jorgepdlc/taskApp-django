@@ -3,9 +3,9 @@
 //import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FiCircle, FiCheckCircle } from "react-icons/fi";
-import { AiOutlineStar } from "react-icons/ai";
+import { AiOutlineStar, AiFillStar } from "react-icons/ai";
 
-export function TaskCard({ task, onCardClick, isSelected, onTaskDone }) {
+export function TaskCard({ task, onCardClick, isSelected, onTaskDone, onTaskFav }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleIconMouseEnter = () => {
@@ -24,9 +24,15 @@ export function TaskCard({ task, onCardClick, isSelected, onTaskDone }) {
     onTaskDone(task);
   };
 
+  const handleTaskFav = () => {
+    onTaskFav(task);
+  };
+
+
+
   return (
     <div
-      className={`flex items-center justify-between rounded px-2 py-3 ${
+      className={`flex items-center justify-between rounded px-2 py-3 text-sm ${
         isSelected ? "bg-neutral-600" : "bg-neutral-800 hover:bg-neutral-700"
       }`}
       onClick={handleCardClick}
@@ -52,7 +58,20 @@ export function TaskCard({ task, onCardClick, isSelected, onTaskDone }) {
           }`}
         >{task.title}</h1>
       </div>
-      <AiOutlineStar className="text-sky-400 text-xl mr-1 cursor-pointer" />
+      {task.fav ? (
+        <AiFillStar className="text-sky-400 text-xl mr-1 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleTaskFav();
+        }} />
+      ) : (
+        <AiOutlineStar className="text-sky-400 text-xl mr-1 cursor-pointer"
+      onClick={(e) => {
+        e.stopPropagation();
+        handleTaskFav();
+      }} />
+      )}
+      
     </div>
   );
 }

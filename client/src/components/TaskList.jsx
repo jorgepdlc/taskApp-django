@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { TaskCard } from "./TaskCard";
 import { IoIosAdd } from "react-icons/io";
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
@@ -12,10 +13,14 @@ export function TaskList({ tasks, setSelectedTask }) {
   const ref = useRef(null);
   const [taskInput, setTaskInput] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [animationParent] = useAutoAnimate()
+  
+  
 
   const handleTaskCardClick = (task) => {
-    setSelectedTask(task);
     setSelectedTaskId(task.id);
+    setSelectedTask(task);
+
   };
 
   const handleAddButtonClick = () => {
@@ -30,7 +35,22 @@ export function TaskList({ tasks, setSelectedTask }) {
     try {
       await updateTask(task.id, {
         title: task.title,
+        fav: task.fav,
         done: !task.done,
+        description: task.description,
+      });
+      console.log("Tarea actualizada exitosamente en la API");
+    } catch (error) {
+      console.error("Error al actualizar la tarea en la API:", error);
+    }
+  };
+
+  const handleTaskFav = async (task) => {
+    try {
+      await updateTask(task.id, {
+        title: task.title,
+        fav: !task.fav,
+        done: task.done,
         description: task.description,
       });
       console.log("Tarea actualizada exitosamente en la API");
@@ -70,7 +90,7 @@ export function TaskList({ tasks, setSelectedTask }) {
 
   return (
     <div>
-      <div className="flex px-8 mb-2">
+      <div className="flex px-8 mb-2 text-sm">
         <div className="w-full h-full pt-3 bg-neutral-800 rounded text-sky-400">
           <div className="flex items-center w-full pb-3">
             <IoIosAdd
@@ -109,9 +129,11 @@ export function TaskList({ tasks, setSelectedTask }) {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-2 px-8">
+      <div className="grid grid-cols-1 gap-2 px-8"
+      ref={animationParent}>
         {tasks
           .filter((task) => !task.done)
+          .sort((a, b) => (b.fav ? 1 : -1))
           .map((task) => (
             <TaskCard
               key={task.id}
@@ -119,6 +141,7 @@ export function TaskList({ tasks, setSelectedTask }) {
               isSelected={selectedTaskId === task.id}
               onCardClick={handleTaskCardClick}
               onTaskDone={handleTaskDone}
+              onTaskFav={handleTaskFav}
             />
           ))}
       </div>
@@ -133,18 +156,21 @@ export function TaskList({ tasks, setSelectedTask }) {
             ) : (
               <IoIosArrowForward className="mr-2" />
             )}
-            <h1 className="text-base">Completado</h1>
+            <h1 className="text-base">Completado {completedTasks.length}</h1>
           </div>
 
           {isTaskListVisible &&
-            completedTasks.map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                isSelected={selectedTaskId === task.id}
-                onCardClick={handleTaskCardClick}
-                onTaskDone={handleTaskDone}
-              />
+            completedTasks
+              .sort((a, b) => (b.fav ? 1 : -1))
+              .map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  isSelected={selectedTaskId === task.id}
+                  onCardClick={handleTaskCardClick}
+                  onTaskDone={handleTaskDone}
+                  onTaskFav={handleTaskFav}
+                />
             ))}
         </div>
       )}
