@@ -26,7 +26,7 @@ export function TaskPage() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex select-none">
       <div className="flex-1">
         <Toolbar />
         <TaskList tasks={tasks} setSelectedTask={setSelectedTask} />

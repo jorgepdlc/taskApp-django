@@ -24,11 +24,11 @@ export function Navigation() {
       <div className="searchbar grid grid-cols-1 content-center w-2/6">
         <div
           className="flex items-center h-auto bg-zinc-800 hover:bg-zinc-700
-                focus:border-transparent rounded p-1"
+                focus:border-transparent rounded p-1 cursor-pointer"
         >
           <LiaSearchSolid className="text-blue-400 mr-2 stroke-1" />
           <input
-            className="bg-transparent border-none w-full focus:outline-none shadow-none"
+            className="cursor-pointer bg-transparent border-none w-full focus:outline-none shadow-none"
             type="search"
             placeholder="Search..."
           />
