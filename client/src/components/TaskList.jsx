@@ -51,7 +51,7 @@ export function TaskList({ tasks, setSelectedTask }) {
         title: task.title,
         fav: !task.fav,
         done: task.done,
-        description: task.description,
+        description: task.description
       });
       console.log("Tarea actualizada exitosamente en la API");
     } catch (error) {

@@ -6,6 +6,7 @@ class Task(models.Model):
     description = models.TextField(blank=True)
     fav = models.BooleanField(default=False)
     done = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return self.title
