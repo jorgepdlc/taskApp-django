@@ -28,8 +28,6 @@ export function TaskCard({ task, onCardClick, isSelected, onTaskDone, onTaskFav 
     onTaskFav(task);
   };
 
-
-
   return (
     <div
       className={`flex items-center justify-between rounded px-2 py-3 text-sm ${
@@ -40,8 +38,8 @@ export function TaskCard({ task, onCardClick, isSelected, onTaskDone, onTaskFav 
       <div className="flex items-center text-3x1 ml-2 mr-4">
         <div
           className="mr-5 cursor-pointer"
-          onMouseEnter={handleIconMouseEnter}
-          onMouseLeave={handleIconMouseLeave}
+          onMouseOver={handleIconMouseEnter}
+          onMouseOut={handleIconMouseLeave}
           onClick={(e) => {
             e.stopPropagation();
             handleTaskDone();

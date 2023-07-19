@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { AiOutlineMenu, AiOutlineSortAscending, AiOutlineCalendar, AiOutlineStar } from "react-icons/ai";
 import { HiOutlineSwitchVertical } from "react-icons/hi";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
-export function Toolbar() {
+export function Toolbar({ onSortAlphabetically, onSortByCreationDate, onSortByImportance }) {
   const options = { weekday: "long", day: "numeric", month: "long" };
   const today = new Date().toLocaleDateString("es-ES", options);
 
@@ -14,29 +15,19 @@ export function Toolbar() {
   };
 
   const handleSortAlphabetically = () => {
-    
+    onSortAlphabetically();
+    setIsDropdownOpen(false);
   };
 
   const handleSortByCreationDate = () => {
-    
+    onSortByCreationDate();
+    setIsDropdownOpen(false);
   };
 
   const handleSortByImportance = () => {
-    
+    onSortByImportance();
+    setIsDropdownOpen(false);
   };
-
-  const handleClickOutsideDropdown = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", handleClickOutsideDropdown);
-    return () => {
-      document.removeEventListener("click", handleClickOutsideDropdown);
-    };
-  }, []);
 
   return (
     <div className="w-full h-24 p-4">
@@ -67,7 +58,10 @@ export function Toolbar() {
               </div>
               <button
                 className="block px-3 py-2 hover:bg-neutral-700 w-full"
-                onClick={handleSortAlphabetically}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSortAlphabetically();
+                }}
               >
                 <div className="flex">
                   <AiOutlineSortAscending className="mr-4 text-xl" />
@@ -77,7 +71,10 @@ export function Toolbar() {
               </button>
               <button
                 className="block px-3 py-2 hover:bg-neutral-700 w-full"
-                onClick={handleSortByCreationDate}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSortByCreationDate();
+                }}
               >
                 <div className="flex">
                   <AiOutlineCalendar className="mr-4 text-xl" />
@@ -86,7 +83,10 @@ export function Toolbar() {
               </button>
               <button
                 className="block px-3 py-2 hover:bg-neutral-700 w-full"
-                onClick={handleSortByImportance}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleSortByImportance();
+                }}
               >
                 <div className="flex">
                   <AiOutlineStar className="mr-4 text-xl" />

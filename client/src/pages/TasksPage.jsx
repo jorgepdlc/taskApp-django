@@ -7,10 +7,22 @@ import { getTasks } from "../api/task.api";
 export function TaskPage() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [sortOption, setSortOption] = useState("importance"); // Nuevo estado
+  const [sortOption, setSortOption] = useState("");
 
   const handlePageHide = () => {
     setSelectedTask(null);
+  };
+
+  const handleSortAlphabetically = () => {
+    setSortOption("alphabetically");
+  };
+
+  const handleSortByCreationDate = () => {
+    setSortOption("creationDate");
+  };
+
+  const handleSortByImportance = () => {
+    setSortOption("importance");
   };
 
   useEffect(() => {
@@ -29,8 +41,12 @@ export function TaskPage() {
   return (
     <div className="flex select-none">
       <div className="flex-1">
-        <Toolbar sortOption={sortOption} setSortOption={setSortOption} />
-        <TaskList tasks={tasks} setSelectedTask={setSelectedTask} sortOption={sortOption} setSortOption={setSortOption} />
+        <Toolbar
+          onSortAlphabetically={handleSortAlphabetically}
+          onSortByCreationDate={handleSortByCreationDate}
+          onSortByImportance={handleSortByImportance}
+        />
+        <TaskList tasks={tasks} setSelectedTask={setSelectedTask} sortOption={sortOption} />
       </div>
       {selectedTask && (
         <div className="w-96 bg-neutral-900 sticky top-0">
@@ -40,5 +56,5 @@ export function TaskPage() {
         </div>
       )}
     </div>
-  );
+  )
 }

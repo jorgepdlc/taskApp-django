@@ -1,26 +1,24 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useEffect } from "react";
-import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { TaskCard } from "./TaskCard";
 import { IoIosAdd } from "react-icons/io";
 import { IoIosArrowForward, IoIosArrowDown } from "react-icons/io";
 import { createTask, updateTask } from "../api/task.api";
 
-export function TaskList({ tasks, setSelectedTask }) {
+export function TaskList({ tasks, setSelectedTask, sortOption }) {
   const [showAdditionalDiv, setShowAdditionalContent] = useState(false);
   const [isTaskListVisible, setTaskListVisibility] = useState(true);
   const [completedTasks, setCompletedTasks] = useState([]);
   const ref = useRef(null);
   const [taskInput, setTaskInput] = useState("");
   const [selectedTaskId, setSelectedTaskId] = useState(null);
-  const [animationParent] = useAutoAnimate()
-  
-  
+  const [animationParent] = useAutoAnimate();
+  const [sortedTaskList, setSortedTaskList] = useState([]);
 
   const handleTaskCardClick = (task) => {
     setSelectedTaskId(task.id);
     setSelectedTask(task);
-
   };
 
   const handleAddButtonClick = () => {
@@ -51,7 +49,7 @@ export function TaskList({ tasks, setSelectedTask }) {
         title: task.title,
         fav: !task.fav,
         done: task.done,
-        description: task.description
+        description: task.description,
       });
       console.log("Tarea actualizada exitosamente en la API");
     } catch (error) {
@@ -85,8 +83,40 @@ export function TaskList({ tasks, setSelectedTask }) {
 
   useEffect(() => {
     const filteredTasks = tasks.filter((task) => task.done);
+    let sortedTasks = [];
+  
+    const sortTasks = () => {
+      if (sortOption === "alphabetically") {
+        sortedTasks = [...tasks].sort((a, b) => a.title.localeCompare(b.title));
+      } else if (sortOption === "creationDate") {
+        sortedTasks = [...tasks].sort((a, b) => a.date_created - b.date_created);
+      } else {
+        sortedTasks = [...tasks].sort((a, b) => {
+          if (a.fav === b.fav) {
+            return a.title.localeCompare(b.title);
+          } else if (a.fav) {
+            return -1;
+          } else {
+            return 1;
+          }
+        });
+      }
+    };
+  
+    sortTasks();
     setCompletedTasks(filteredTasks);
-  }, [tasks]);
+    setSortedTaskList(sortedTasks);
+  
+    // Restablece la tarea seleccionada solo si todavía está presente en la lista de tareas
+    if (selectedTaskId !== null) {
+      const selectedTask = tasks.find((task) => task.id === selectedTaskId);
+      if (!selectedTask) {
+        setSelectedTaskId(null);
+      }
+    } else {
+      setSelectedTaskId(null);
+    }
+  }, [tasks, sortOption, selectedTaskId]);
 
   return (
     <div>
@@ -129,9 +159,8 @@ export function TaskList({ tasks, setSelectedTask }) {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-2 px-8"
-      ref={animationParent}>
-        {tasks
+      <div className="grid grid-cols-1 gap-2 px-8" ref={animationParent}>
+        {sortedTaskList
           .filter((task) => !task.done)
           .map((task) => (
             <TaskCard
@@ -159,16 +188,17 @@ export function TaskList({ tasks, setSelectedTask }) {
           </div>
 
           {isTaskListVisible &&
-            completedTasks
-              .map((task) => (
-                <TaskCard
-                  key={task.id}
-                  task={task}
-                  isSelected={selectedTaskId === task.id}
-                  onCardClick={handleTaskCardClick}
-                  onTaskDone={handleTaskDone}
-                  onTaskFav={handleTaskFav}
-                />
+            sortedTaskList
+            .filter((task) => task.done)
+            .map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                isSelected={selectedTaskId === task.id}
+                onCardClick={handleTaskCardClick}
+                onTaskDone={handleTaskDone}
+                onTaskFav={handleTaskFav}
+              />
             ))}
         </div>
       )}

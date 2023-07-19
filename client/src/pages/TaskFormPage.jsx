@@ -63,8 +63,8 @@ export function TaskFormPage({ task, onTaskDeleted, onPageHide }) {
             <div className="flex rounded-t border-b border-b-neutral-600 bg-neutral-800 px-2 py-3 hover:bg-neutral-700">
               <div
                 className="flex items-center text-3x1 cursor-pointer ml-2 mr-4"
-                onMouseEnter={handleIconMouseEnter}
-                onMouseLeave={handleIconMouseLeave}
+                onMouseOver={handleIconMouseEnter}
+                onMouseOut={handleIconMouseLeave}
                 onClick={(e) => {
                   e.stopPropagation();
                   task.done = !task.done;
