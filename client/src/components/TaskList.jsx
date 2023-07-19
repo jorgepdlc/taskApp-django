@@ -109,7 +109,7 @@ export function TaskList({ tasks, setSelectedTask }) {
             />
           </div>
 
-          <div className="">
+          <div className="" ref={animationParent}>
             {showAdditionalDiv && (
               <div className="flex justify-between px-4 bg-zinc-900 rounded-b border-t border-t-gray-400 py-2">
                 <div className="flex items-center"></div>
@@ -133,7 +133,6 @@ export function TaskList({ tasks, setSelectedTask }) {
       ref={animationParent}>
         {tasks
           .filter((task) => !task.done)
-          .sort((a, b) => (b.fav ? 1 : -1))
           .map((task) => (
             <TaskCard
               key={task.id}
@@ -161,7 +160,6 @@ export function TaskList({ tasks, setSelectedTask }) {
 
           {isTaskListVisible &&
             completedTasks
-              .sort((a, b) => (b.fav ? 1 : -1))
               .map((task) => (
                 <TaskCard
                   key={task.id}

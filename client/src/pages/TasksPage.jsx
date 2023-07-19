@@ -7,6 +7,7 @@ import { getTasks } from "../api/task.api";
 export function TaskPage() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [tasks, setTasks] = useState([]);
+  const [sortOption, setSortOption] = useState("importance"); // Nuevo estado
 
   const handlePageHide = () => {
     setSelectedTask(null);
@@ -28,8 +29,8 @@ export function TaskPage() {
   return (
     <div className="flex select-none">
       <div className="flex-1">
-        <Toolbar />
-        <TaskList tasks={tasks} setSelectedTask={setSelectedTask} />
+        <Toolbar sortOption={sortOption} setSortOption={setSortOption} />
+        <TaskList tasks={tasks} setSelectedTask={setSelectedTask} sortOption={sortOption} setSortOption={setSortOption} />
       </div>
       {selectedTask && (
         <div className="w-96 bg-neutral-900 sticky top-0">

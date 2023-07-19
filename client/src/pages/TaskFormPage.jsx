@@ -37,21 +37,21 @@ export function TaskFormPage({ task, onTaskDeleted, onPageHide }) {
     if (e.key === "Enter") {
       e.preventDefault();
 
-      updateTask(task.id, { 
-        title: title, 
+      updateTask(task.id, {
+        title: title,
         description: description,
         fav: task.fav,
-        done: task.done
+        done: task.done,
       });
     }
   };
 
   const handleUpdateTask = () => {
-    updateTask(task.id, { 
-      title: title, 
+    updateTask(task.id, {
+      title: title,
       description: description,
       fav: task.fav,
-      done: task.done
+      done: task.done,
     });
   };
 
@@ -126,8 +126,8 @@ export function TaskFormPage({ task, onTaskDeleted, onPageHide }) {
           <textarea
             rows="3"
             placeholder="Agregar Nota"
-            className="rounded w-full max-h-44 bg-neutral-800 px-3 py-3 mt-2 text-sm
-  hover:border hover:border-neutral-600 focus:outline-none shadow-none"
+            className="rounded w-full h-36 max-h-44 bg-neutral-800 px-3 py-3 mt-2 text-sm border 
+            border-neutral-800 hover:border-neutral-600 focus:outline-none shadow-none"
             value={description}
             onChange={handleDescriptionChange}
             onKeyDown={handleKeyDown}
@@ -141,7 +141,7 @@ export function TaskFormPage({ task, onTaskDeleted, onPageHide }) {
           onClick={onPageHide}
         />
         <div className="text-xs text-neutral-400">
-          Creado el {new Date(task.date_created).toLocaleDateString("es-ES")}
+          Creado el {new Date(task.date_created).toLocaleString("es-ES")}
         </div>
         <GoTrash
           onClick={async () => {
